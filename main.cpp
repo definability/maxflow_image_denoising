@@ -1,3 +1,4 @@
+#include "greyscale_image.hpp"
 #include "types.hpp"
 
 #include <exception>
@@ -43,6 +44,7 @@ int main(const int argc, const char* argv[]) try
       << " to "
       << std::to_string(std::numeric_limits<DiscontinuityPenalty>::max())
       << " but got: '" << argv[3] << '\'' << std::endl;
+    std::cerr << "Error message: " << exception.what();
     return EXIT_FAILURE;
   }
   catch (const std::out_of_range& exception)
@@ -53,8 +55,12 @@ int main(const int argc, const char* argv[]) try
       << " to "
       << std::to_string(std::numeric_limits<DiscontinuityPenalty>::max())
       << " but got: '" << argv[3] << '\'' << std::endl;
+    std::cerr << "Error message: " << exception.what();
     return EXIT_FAILURE;
   }
+
+  const GreyscaleImage image{input_path.string()};
+  image.save(output_path);
 
   return EXIT_SUCCESS;
 }
