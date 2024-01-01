@@ -1,4 +1,4 @@
-#include "max_flow_solver_implementation.hpp"
+#include "max_flow_denoiser.hpp"
 
 #include "max_flow_exceptions.hpp"
 
@@ -9,11 +9,11 @@
 
 using namespace std::string_literals;
 
-MaxFlowSolver::MaxFlowSolverImplementation::MaxFlowSolverImplementation(
+BinaryImageDenoiser::MaxFlowDenoiser::MaxFlowDenoiser(
   const ImageSize height,
   const ImageSize width,
   const EdgeCapacity discontinuity_penalty)
-  : MaxFlowSolverImplementation{
+  : MaxFlowDenoiser{
     height,
     width,
     discontinuity_penalty,
@@ -22,7 +22,7 @@ MaxFlowSolver::MaxFlowSolverImplementation::MaxFlowSolverImplementation(
 {
 }
 
-void MaxFlowSolver::MaxFlowSolverImplementation::operator()(
+void BinaryImageDenoiser::MaxFlowDenoiser::operator()(
   const GreyscaleImage& image)
 {
   this->replace_pixel_edges(image);
@@ -55,18 +55,9 @@ void MaxFlowSolver::MaxFlowSolverImplementation::operator()(
 }
 
 void
-MaxFlowSolver::MaxFlowSolverImplementation::operator>>(GreyscaleImage& image)
+BinaryImageDenoiser::MaxFlowDenoiser::operator>>(GreyscaleImage& output_image) const
 {
-  auto&& colours = boost::get(boost::vertex_color, graph);
-  for (ImageSize y = 0; y < this->rows; ++y)
-  {
-    for (ImageSize x = 0; x < this->columns; ++x)
-    {
-      image(y, x) = colours[y * this->columns + x] == boost::black_color
-                    ? std::numeric_limits<PixelValue>::max()
-                    : 0x00;
-    }
-  }
+  auto&& colours = boost::get(boost::vertex_color, this->graph);
 
   auto&& source_colour = colours[this->source_index];
   auto&& sink_colour = colours[this->sink_index];
@@ -82,9 +73,19 @@ MaxFlowSolver::MaxFlowSolverImplementation::operator>>(GreyscaleImage& image)
       "Source and sink have the same colour "s + std::to_string(source_colour)
     };
   }
+
+  for (ImageSize y = 0; y < this->rows; ++y)
+  {
+    for (ImageSize x = 0; x < this->columns; ++x)
+    {
+      output_image(y, x) = colours[y * this->columns + x] == boost::black_color
+                    ? std::numeric_limits<PixelValue>::max()
+                    : 0x00;
+    }
+  }
 }
 
-MaxFlowSolver::MaxFlowSolverImplementation::MaxFlowSolverImplementation(
+BinaryImageDenoiser::MaxFlowDenoiser::MaxFlowDenoiser(
   const ImageSize height,
   const ImageSize width,
   const EdgeCapacity discontinuity_penalty,
@@ -100,8 +101,8 @@ MaxFlowSolver::MaxFlowSolverImplementation::MaxFlowSolverImplementation(
   this->add_edges(discontinuity_penalty);
 }
 
-MaxFlowSolver::MaxFlowSolverImplementation::Graph
-MaxFlowSolver::MaxFlowSolverImplementation::construct_graph(const VertexCount vertices_count)
+BinaryImageDenoiser::MaxFlowDenoiser::Graph
+BinaryImageDenoiser::MaxFlowDenoiser::construct_graph(const VertexCount vertices_count)
 {
   if (this->source_index < static_cast<VertexCount>(this->rows) * this->columns)
   {
@@ -184,7 +185,7 @@ MaxFlowSolver::MaxFlowSolverImplementation::construct_graph(const VertexCount ve
   };
 }
 
-void MaxFlowSolver::MaxFlowSolverImplementation::add_edges(
+void BinaryImageDenoiser::MaxFlowDenoiser::add_edges(
   const EdgeCapacity discontinuity_penalty)
 {
   const auto& edges_capacity_map = boost::get(
@@ -225,7 +226,7 @@ void MaxFlowSolver::MaxFlowSolverImplementation::add_edges(
   }
 }
 
-void MaxFlowSolver::MaxFlowSolverImplementation::replace_pixel_edges(
+void BinaryImageDenoiser::MaxFlowDenoiser::replace_pixel_edges(
   const GreyscaleImage& image)
 {
   if (this->rows != image.height())

@@ -1,5 +1,5 @@
 #include "greyscale_image.hpp"
-#include "max_flow_solver.hpp"
+#include "binary_image_denoiser.hpp"
 #include "types.hpp"
 
 #include <exception>
@@ -61,7 +61,7 @@ int main(const int argc, const char* argv[]) try
   }
 
   GreyscaleImage image{input_path.string()};
-  MaxFlowSolver max_flow_solver{image.height(), image.width(),
+  BinaryImageDenoiser max_flow_solver{image.height(), image.width(),
                                 discontinuity_penalty};
   max_flow_solver(image);
   image.save(output_path);
