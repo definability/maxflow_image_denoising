@@ -1,10 +1,10 @@
 #ifndef MAXFLOW_IMAGE_DENOISING_MAX_FLOW_SOLVER_IMPLEMENTATION_HPP
 #define MAXFLOW_IMAGE_DENOISING_MAX_FLOW_SOLVER_IMPLEMENTATION_HPP
 
-#include "../max_flow_solver.hpp"
+#include "max_flow_solver.hpp"
 
-#include "../greyscale_image.hpp"
-#include "../types.hpp"
+#include "greyscale_image.hpp"
+#include "types.hpp"
 
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/compressed_sparse_row_graph.hpp>

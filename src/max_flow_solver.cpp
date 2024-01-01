@@ -1,6 +1,6 @@
 #include "max_flow_solver.hpp"
 
-#include "impl/max_flow_solver_implementation.hpp"
+#include "max_flow_solver_implementation.hpp"
 
 #include <memory>
 
