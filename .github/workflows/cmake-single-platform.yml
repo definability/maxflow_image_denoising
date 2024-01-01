@@ -1,0 +1,47 @@
+name: CMake on a single platform
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+          build_type: [Release, Debug]
+          c_compiler: [gcc, clang]
+          include:
+            - c_compiler: gcc
+              cpp_compiler: g++
+            - c_compiler: clang
+              cpp_compiler: clang++
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libopencv-dev libboost-graph-dev
+        
+    - name: Configure CMake
+      run: >
+        cmake -S ${{ github.workspace }}
+        -B ${{github.workspace}}/build
+        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+
+    - name: Build
+      # Build your program with the given configuration
+      run: cmake --build ${{github.workspace}}/build --config ${{matrix.build_type}}
+
