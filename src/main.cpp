@@ -1,5 +1,5 @@
-#include "greyscale_image.hpp"
 #include "binary_image_denoiser.hpp"
+#include "greyscale_image.hpp"
 #include "types.hpp"
 
 #include <exception>
@@ -17,14 +17,14 @@ int main(const int argc, const char* argv[]) try
     return EXIT_FAILURE;
   }
 
-  const auto input_path{std::filesystem::absolute(argv[1])};
+  const auto& input_path = std::filesystem::absolute(argv[1]);
   if (!std::filesystem::exists(input_path))
   {
     std::cerr << "Input file does not exist: " << input_path << std::endl;
     return EXIT_FAILURE;
   }
 
-  const auto output_path{std::filesystem::absolute(argv[2])};
+  const auto& output_path = std::filesystem::absolute(argv[2]);
   if (!std::filesystem::exists(output_path.parent_path()))
   {
     std::cerr << "Output folder does not exist: " << output_path.parent_path()
@@ -61,19 +61,18 @@ int main(const int argc, const char* argv[]) try
   }
 
   GreyscaleImage image{input_path.string()};
-  BinaryImageDenoiser max_flow_solver{image.height(), image.width(),
-                                discontinuity_penalty};
+  BinaryImageDenoiser max_flow_solver{
+    image.height(), image.width(), discontinuity_penalty
+  };
   max_flow_solver(image);
   image.save(output_path);
 
   return EXIT_SUCCESS;
-}
-catch (const std::exception& exception)
+} catch (const std::exception& exception)
 {
   std::cerr << "Unhandled exception: " << exception.what() << std::endl;
   return EXIT_FAILURE;
-}
-catch (...)
+} catch (...)
 {
   std::cerr << "Unknown exception." << std::endl;
   return EXIT_FAILURE;

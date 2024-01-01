@@ -3,6 +3,11 @@
 Example of using the [Boykov-Kolmogorov Max-Flow/Min-Cut algorithm]
 implementation from [The Boost Graph Library] for image denoising.
 
+To dive in the implementation details,
+check out
+[my Medium post][Binary Image Denoising with The Boost Graph Max-Flow]
+dedicated to this repository.
+
 ## Dependencies
 
 The project depends on CMake (at least [3.12][CMake 3.12]),
@@ -64,6 +69,8 @@ so the author is not responsible for your usage of it.
 
 [Boykov-Kolmogorov Max-Flow/Min-Cut algorithm]:
   https://discovery.ucl.ac.uk/id/eprint/13383/1/13383.pdf
+[Binary Image Denoising with The Boost Graph Max-Flow]:
+  https://medium.com/@valeriy.krygin/binary-image-denoising-with-the-boost-graph-max-flow-6ec817d62858
 [The Boost Graph Library]:
   https://www.boost.org/doc/libs/1_80_0/libs/graph/doc/index.html
 [CMake 3.12]:

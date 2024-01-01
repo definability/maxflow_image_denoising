@@ -35,8 +35,7 @@ void BinaryImageDenoiser::MaxFlowDenoiser::operator()(
   auto&& vertex_index_map = boost::get(boost::vertex_index, this->graph);
   auto&& vertex_distance_map = boost::get(boost::vertex_distance, this->graph);
   auto&& vertex_predecessor_map = boost::get(
-    boost::vertex_predecessor,
-    this->graph
+    boost::vertex_predecessor, this->graph
   );
   auto&& vertex_colour_map = boost::get(boost::vertex_color, this->graph);
 
@@ -79,8 +78,8 @@ BinaryImageDenoiser::MaxFlowDenoiser::operator>>(GreyscaleImage& output_image) c
     for (ImageSize x = 0; x < this->columns; ++x)
     {
       output_image(y, x) = colours[y * this->columns + x] == boost::black_color
-                    ? std::numeric_limits<PixelValue>::max()
-                    : 0x00;
+                           ? std::numeric_limits<PixelValue>::max()
+                           : 0x00;
     }
   }
 }
@@ -119,16 +118,14 @@ BinaryImageDenoiser::MaxFlowDenoiser::construct_graph(const VertexCount vertices
     throw EdgeInitialisationException{
       "Sink index "s + std::to_string(this->sink_index) +
       " is less than or equal to the source index "s +
-      std::to_string(this->source_index) +
-      " but it must follow the source"
+      std::to_string(this->source_index) + " but it must follow the source"
     };
   }
   if (this->sink_index + 1 != vertices_count)
   {
     throw EdgeInitialisationException{
       "Sink index "s + std::to_string(this->sink_index) +
-      " must be the last vertex index "s +
-      std::to_string(vertices_count - 1)
+      " must be the last vertex index "s + std::to_string(vertices_count - 1)
     };
   }
 

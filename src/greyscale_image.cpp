@@ -5,7 +5,8 @@
 
 GreyscaleImage::GreyscaleImage(const std::filesystem::path& path)
   : image{
-  std::make_unique<cv::Mat>(cv::imread(path.string(), cv::IMREAD_GRAYSCALE))}
+  std::make_unique<cv::Mat>(cv::imread(path.string(), cv::IMREAD_GRAYSCALE))
+}
 {
 }
 
@@ -31,14 +32,14 @@ ImageSize GreyscaleImage::width() const
 
 PixelValue GreyscaleImage::operator()(ImageSize y, ImageSize x) const
 {
-  return this->image->at<std::uint8_t>(static_cast<int>(y),
-                                       static_cast<int>(x));
+  return this->image->at<std::uint8_t>(
+    static_cast<int>(y), static_cast<int>(x));
 }
 
 PixelValue& GreyscaleImage::operator()(ImageSize y, ImageSize x)
 {
-  return this->image->at<std::uint8_t>(static_cast<int>(y),
-                                       static_cast<int>(x));
+  return this->image->at<std::uint8_t>(
+    static_cast<int>(y), static_cast<int>(x));
 }
 
 GreyscaleImage::~GreyscaleImage() = default;
